@@ -1,0 +1,15 @@
+#!/bin/bash
+
+make clean
+
+echo "Python 2" `(time python2 compute_mod.py) 2>&1|grep real`
+echo "Python 3" `(time python3 compute_mod.py) 2>&1|grep real`
+echo "Micropython" `(time micropython compute_mod.py) 2>&1|grep real`
+echo "Micropython (optimized)" `(time micropython compute_mod_upy.py) 2>&1|grep real`
+echo "Micropython (native C)" `(time ./micropython_nat_cmod exec_nat_mod_upy.py) 2>&1|grep real`
+
+make compute_mod.so
+echo "Cython" `(time python3 exec_mod.py) 2>&1|grep real`
+
+make only_c
+echo "C-Only" `(time ./only_c) 2>&1|grep real`
